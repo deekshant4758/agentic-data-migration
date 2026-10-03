@@ -39,6 +39,7 @@ export const migrationPlanSchema = z.object({
   mappings: z.array(mappingRuleSchema).min(1),
   risk_assessment: z.string().optional(),
   notes: z.string().optional(),
+  clarification_questions: z.array(z.string()).optional(),
 });
 
 export type MappingRule = z.infer<typeof mappingRuleSchema>;

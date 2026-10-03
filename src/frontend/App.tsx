@@ -148,6 +148,14 @@ export default function App() {
                 rows={currentPlan.mappings.map((m: any) => [m.source_field, m.target_field, m.transform, m.params ? JSON.stringify(m.params) : "—"])}
               />
               <div className="text-xs text-muted-foreground">Risk: {currentPlan.risk_assessment ?? "n/a"} · {currentPlan.notes ?? ""}</div>
+              {currentPlan.clarification_questions?.length > 0 && (
+                <div>
+                  <h4 className="text-sm font-semibold">Clarification Questions</h4>
+                  <ul className="list-disc pl-5 text-xs text-muted-foreground">
+                    {currentPlan.clarification_questions.map((q: string, i: number) => <li key={i}>{q}</li>)}
+                  </ul>
+                </div>
+              )}
               <details>
                 <summary className="cursor-pointer text-sm font-semibold">Raw AI plan JSON</summary>
                 <pre className="mt-2 max-h-60 overflow-auto rounded bg-slate-100 p-3 text-xs">{JSON.stringify(currentPlan, null, 2)}</pre>
@@ -168,8 +176,9 @@ export default function App() {
           )}
           <Button onClick={runDryRun} disabled={isLoading}>{isLoading ? "Processing..." : "Run Dry Run"}</Button>
           {drySummary && (
-            <div className="mt-5 grid grid-cols-3 gap-4">
+            <div className="mt-5 grid grid-cols-4 gap-4">
               <Stat label="Source" value={drySummary.source_count} cls="text-blue-600" />
+              <Stat label="Transformed" value={drySummary.accepted_count} cls="text-indigo-600" />
               <Stat label="Accepted" value={drySummary.accepted_count} cls="text-green-600" />
               <Stat label="Rejected (Quarantine)" value={drySummary.rejected_count} cls="text-red-600" />
             </div>
@@ -382,7 +391,7 @@ function HistoryTab({ notify, withLoading }: any) {
   return (
     <Card>
       <Table
-        headers={["Run ID", "Status", "Started", "Total", "Accepted", "Rejected", ""]}
+        headers={["Run ID", "Status", "Started", "Total", "Accepted", "Rejected", "Retries", ""]}
         rows={runs.map((r) => [
           <span className="font-mono text-xs">{r.run_id}</span>,
           <Badge tone={tone(r.status)}>{r.status}</Badge>,
@@ -390,6 +399,7 @@ function HistoryTab({ notify, withLoading }: any) {
           r.source_count ?? 0,
           r.accepted_count ?? 0,
           r.rejected_count ?? 0,
+          r.retries ?? 0,
           r.status === "success" ? (
             <Button variant="destructive" className="px-3 py-1 text-xs" onClick={() => setConfirmId(r.run_id)}>Rollback</Button>
           ) : "—",

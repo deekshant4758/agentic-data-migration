@@ -13,7 +13,8 @@ CREATE TABLE IF NOT EXISTS migration_plans (
     target_schema TEXT,
     mapping_rules TEXT,
     status TEXT DEFAULT 'draft',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    approved_at DATETIME
 );
 
 CREATE TABLE IF NOT EXISTS migration_runs (
@@ -24,7 +25,8 @@ CREATE TABLE IF NOT EXISTS migration_runs (
     status TEXT,
     source_count INTEGER,
     accepted_count INTEGER,
-    rejected_count INTEGER
+    rejected_count INTEGER,
+    retries INTEGER DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS target_contractors (

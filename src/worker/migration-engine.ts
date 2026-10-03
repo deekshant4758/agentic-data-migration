@@ -170,6 +170,7 @@ export async function executeMigration(db: D1Database, planId: string, runId: st
   // Idempotency: return existing run if present.
   const existing = await db.prepare("SELECT * FROM migration_runs WHERE run_id = ?").bind(runId).first();
   if (existing) {
+    await db.prepare("UPDATE migration_runs SET retries = retries + 1 WHERE run_id = ?").bind(runId).run();
     return { run: existing, resumed: true };
   }
 

@@ -78,6 +78,7 @@ function buildFallbackPlan(): MigrationPlan {
     ],
     risk_assessment: "medium",
     notes: "Fallback deterministic plan (AI unavailable or mock mode enabled).",
+    clarification_questions: ["Should inactive employees be flagged for archival before migration?"],
   };
 }
 
@@ -98,7 +99,7 @@ export async function runPlannerAgent(env: Env, plannerLog: string[]): Promise<M
 
   const system = `You are a data migration planner. Use the provided tools to inspect schemas, validate each transform, then assess risk.
 Finally, respond with ONLY a strict JSON object matching this shape:
-{"source_schema":"legacy_employee","target_schema":"modern_contractor","mappings":[{"source_field":"full_name","target_field":"first_name","transform":"split_name"}],"risk_assessment":"low|medium|high","notes":"..."}
+{"source_schema":"legacy_employee","target_schema":"modern_contractor","mappings":[{"source_field":"full_name","target_field":"first_name","transform":"split_name"}],"risk_assessment":"low|medium|high","notes":"...","clarification_questions":["..."]}
 Allowed transforms: split_name, map_enum, math_divide, format_date, direct.`;
 
   const messages: any[] = [
@@ -157,7 +158,7 @@ export async function generateAndSavePlan(env: Env): Promise<{ planId: string; p
 }
 
 export async function approvePlan(env: Env, planId: string): Promise<boolean> {
-  const res = await env.DB.prepare("UPDATE migration_plans SET status = 'approved' WHERE plan_id = ?").bind(planId).run();
+  const res = await env.DB.prepare("UPDATE migration_plans SET status = 'approved', approved_at = ? WHERE plan_id = ?").bind(new Date().toISOString(), planId).run();
   return (res.meta.changes ?? 0) > 0;
 }
 
