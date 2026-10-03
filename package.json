@@ -1,0 +1,36 @@
+{
+  "name": "agentic-data-migration",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:worker": "wrangler dev",
+    "build": "vite build",
+    "deploy": "vite build && wrangler deploy",
+    "d1:create": "wrangler d1 create migration-workbench-db",
+    "d1:schema": "wrangler d1 execute migration-workbench-db --file=./schema.sql --remote",
+    "d1:schema:local": "wrangler d1 execute migration-workbench-db --file=./schema.sql --local",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "expr-eval": "^2.0.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "uuid": "^10.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250114.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@types/uuid": "^10.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.16",
+    "typescript": "^5.7.2",
+    "vite": "^5.4.11",
+    "wrangler": "^3.99.0"
+  }
+}

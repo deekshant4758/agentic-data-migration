@@ -1,0 +1,19 @@
+name = "agentic-data-migration"
+main = "src/index.ts"
+compatibility_date = "2025-01-10"
+compatibility_flags = ["nodejs_compat"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "migration-workbench-db"
+database_id = "REPLACE_WITH_YOUR_D1_ID"
+
+[ai]
+binding = "AI"
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+
+[vars]
+USE_MOCK_AI = "false"
