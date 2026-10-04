@@ -6,7 +6,7 @@ compatibility_flags = ["nodejs_compat"]
 [[d1_databases]]
 binding = "DB"
 database_name = "migration-workbench-db"
-database_id = "REPLACE_WITH_YOUR_D1_ID"
+database_id = "c837fb98-1ba3-4d15-a5fb-03b5fc5e62e5"
 
 [ai]
 binding = "AI"
